@@ -8,5 +8,7 @@ INCLUDEPATH += .
 
 # Input
 SOURCES += main.cpp
+RESOURCES += main.qrc
 
 QT += widgets
+QT += quick

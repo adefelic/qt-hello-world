@@ -1,13 +1,10 @@
 #include <QApplication>
-#include <QWidget>
+#include <QQmlApplicationEngine>
+
 
 int main(int argc, char *argv[]) {
 	QApplication app(argc, argv);
-	QWidget window;
-
-	window.resize(250, 150);
-	window.setWindowTitle("Hello World");
-	window.show();
+	QQmlApplicationEngine engine(QUrl(QStringLiteral("qrc:/main.qml")));
 	return app.exec();
 }
 
