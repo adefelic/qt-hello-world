@@ -1,23 +1,16 @@
 #include <QApplication>
 #include <QQuickView>
 #include <QQuickItem>
+#include <QTimer>
 #include <QCommandLineParser>
-#include "ClearButton.h"
+#include "components/MessageText.h"
+#include "components/Server.h"
 #include "debug.h"
-
-
-// torn between QQmlApplicationEngine and QQuickView
-
-// replace the text of "message_text" with the text passed 
-void update_message_text(std::unique_ptr<QQuickView> &view, QString new_text = "") {
-	QObject *message_text = view->rootObject()->findChild<QQuickItem *>("message_text");
-	message_text->setProperty("text", new_text);
-}
 
 int main(int argc, char *argv[]) {
 	QApplication app(argc, argv);
 
-	// parse command line
+	// parse command line args
 	// a path to a socket is required
 	QCommandLineParser parser;
 	parser.addPositionalArgument("path-to-socket", QCoreApplication::translate("main", "Path to socket"));
@@ -25,31 +18,28 @@ int main(int argc, char *argv[]) {
 	auto args = parser.positionalArguments();
 	if (args.isEmpty()) {
 		fprintf(stderr, "%s\n", qPrintable(QCoreApplication::translate("main", "Error: Must specify a socket in the form:\n./qt-hello-world path_to_socket")));
-		return 1; // there's probably a better way to do this
+		return 1; // there could be a better way to exit before calling app.exec()
 	}
 	auto socket_path = parser.positionalArguments().at(0);
 
-	// create our QQuickView
+	// create QQuickView
 	auto view = std::make_unique<QQuickView>(QUrl(QStringLiteral("qrc:/main.qml")));
 
-	// connect the event handler "ClearButton" to the button itself
+	// connect the clear button to the text box's self-clearing function
 	QObject *clear_button = view->rootObject()->findChild<QQuickItem *>("button_clear");
-	ClearButton clear_button_handler(view);
-	// have the handler listen for the "clicked()"" signal
+	QObject *message_text = view->rootObject()->findChild<QQuickItem *>("message_text");
+	MessageText text_handler(message_text);
 	QObject::connect(
 		clear_button, SIGNAL(clicked()),
-		&clear_button_handler, SLOT(clickedSlot()));
+		&text_handler, SLOT(clear_slot()));
 
-	// TODO: after_five_seconds(update_message_text());
+	// create a server at the path passed in arg1
+	Server server(socket_path);
 
-	/* TODO:
-	connection = connect(path-to-socket);
-	while((in_message = connection.get()) !== '\n') {
-		if (in_message) {
-			update_message_text(in_message);
-		}
-	}
-	*/
+	// signal clear_slot() after five seconds
+	// this will get moved to the socket handling part of the code later
+	QTimer::singleShot(5000, &text_handler, SLOT(clear_slot()));
+
 	view->show();
 	return app.exec();
 }

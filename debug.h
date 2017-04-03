@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QQuickView>
 #include <QQuickItem>
+#include <memory>
 
 void dump_props(QObject *o);
 void dump_qml_tree(std::unique_ptr<QQuickView> &view);
