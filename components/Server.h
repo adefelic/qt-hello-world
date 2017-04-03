@@ -8,10 +8,13 @@ class Server : public QDialog {
 	Q_OBJECT
 public:
 	Server(QString socket_path);
+	~Server();
 private:
 	QLocalServer *server;
 private slots:
-	void respond();
+	void read();
+signals:
+	void received_text(QString s);
 };
 
 #endif

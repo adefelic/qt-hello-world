@@ -3,6 +3,7 @@
 #include <QQuickItem>
 #include <QTimer>
 #include <QCommandLineParser>
+#include <memory>
 #include "components/MessageText.h"
 #include "components/Server.h"
 #include "debug.h"
@@ -31,14 +32,15 @@ int main(int argc, char *argv[]) {
 	MessageText text_handler(message_text);
 	QObject::connect(
 		clear_button, SIGNAL(clicked()),
-		&text_handler, SLOT(clear_slot()));
+		&text_handler, SLOT(clear_text()));
 
 	// create a server at the path passed in arg1
 	Server server(socket_path);
 
-	// signal clear_slot() after five seconds
-	// this will get moved to the socket handling part of the code later
-	QTimer::singleShot(5000, &text_handler, SLOT(clear_slot()));
+	// when the server receives a message, update the message_text
+	QObject::connect(
+		&server, SIGNAL(received_text(QString)),
+		&text_handler, SLOT(set_text(QString)));
 
 	view->show();
 	return app.exec();
