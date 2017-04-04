@@ -5,7 +5,7 @@
 Server::Server(QString socket_path) {
 	this->server = new QLocalServer();
 	if (!this->server->listen(socket_path)) {
-		qDebug("%s", server->errorString().toLatin1().constData());
+		fprintf(stderr, "%s\n", qPrintable(server->errorString().toLatin1().constData()));
 	}
 	connect(this->server, SIGNAL(newConnection()), this, SLOT(read()));
 }

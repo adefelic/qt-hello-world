@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
 	auto args = parser.positionalArguments();
 	if (args.isEmpty()) {
 		fprintf(stderr, "%s\n",
-			qPrintable(QCoreApplication::translate("main", "Error: Must specify a socket in the form:\n./qt-hello-world path_to_socket")));
+			qPrintable("Error: Must specify a socket in the form:\n./qt-hello-world path_to_socket"));
 		return 1; // there could be a better way to exit before calling app.exec()
 	}
 	auto socket_path = parser.positionalArguments().at(0);
