@@ -14,7 +14,8 @@ Server::~Server() {
 	this->server->close();
 }
 
-// replace the "text" property of a QObject with the text passed 
+// read data from a socket connection until reaching a newline character
+// emit signal "received_text(QString)" and pass the received data as text
 void Server::read() {
 	QLocalSocket *socket = this->server->nextPendingConnection();
 	socket->waitForReadyRead();

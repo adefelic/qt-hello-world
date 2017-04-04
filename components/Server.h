@@ -4,6 +4,9 @@
 #include <QDialog>
 #include <QLocalServer>
 
+// this class instantiates a QLocalServer at the supplied path
+// when the server receives a connection, 
+//   it reads in text data and emits it via the signal "received_text(QString)"
 class Server : public QDialog {
 	Q_OBJECT
 public:

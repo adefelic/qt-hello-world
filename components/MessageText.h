@@ -5,6 +5,7 @@
 #include <QQuickItem>
 #include <QTimer>
 
+// this class describes behavior for the "MessageText" object in main.qml
 class MessageText : public QObject {
 	Q_OBJECT
 public:
