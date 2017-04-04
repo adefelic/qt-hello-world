@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 		&text_handler, SLOT(clear_text()));
 
 	// create a socket server at the path passed in arg1
-	Server server(socket_path);
+	Server server(view->rootObject(), socket_path);
 
 	// when the server receives a message, update the message_text
 	QObject::connect(
