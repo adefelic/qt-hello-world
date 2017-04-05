@@ -10,11 +10,6 @@ Server::Server(QObject *parent, QString socket_path) {
 	connect(this->server, SIGNAL(newConnection()), this, SLOT(read()));
 }
 
-Server::~Server() {
-	this->server->close();
-	delete this->server;
-}
-
 // read data from a socket connection until reaching a newline character
 // emit signal "received_text(QString)" and pass the received data as text
 void Server::read() {

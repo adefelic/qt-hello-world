@@ -11,7 +11,6 @@ class Server : public QDialog {
 	Q_OBJECT
 public:
 	Server(QObject *parent, QString socket_path);
-	~Server();
 private:
 	QLocalServer *server;
 private slots:
